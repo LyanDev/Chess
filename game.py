@@ -22,7 +22,7 @@ class Piece(ABC):
 
     @staticmethod
     def cell_validaty(pos: str):
-        if pos[0] in FILE and pos[1] in RANK:
+        if pos[0] in FILE and pos[1:] in RANK:
             return True
         return False    
 
@@ -42,7 +42,8 @@ class King(Piece):
 
 
 class Queen(Piece):
-    pass 
+    def valid_move(self):
+        return Bishop(self.position).valid_move() + Rooke(self.position).valid_move()
 
 class Bishop(Piece):
     def valid_move(self):
@@ -69,7 +70,16 @@ class Knight(Piece):
     pass
 
 class Rooke(Piece):
-    pass
+    def valid_move(self):
+        output = []
+
+        for file in FILE.replace(self.position[0], ""):
+            output.append(file + self.position[1])
+        
+        for rank in RANK.replace(self.position[1], ""):
+            output.append(self.position[0] + rank)
+
+        return output
 
 class Pawn(Piece):
     pass
@@ -80,6 +90,6 @@ class Pawn(Piece):
 # ]
 
 if "__main__" == __name__:
-    b = Bishop("f6")
+    b = Queen("f6")
+    print(b.valid_move())
 
-    
